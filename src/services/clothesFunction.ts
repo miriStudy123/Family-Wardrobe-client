@@ -1,5 +1,4 @@
 import axios from "axios"
-import type { Look } from "../pages/clothes";
 import { API_URL } from "./generalService";
 
 export const GetClothes = async (filter: string) => {
@@ -18,7 +17,7 @@ export const GetClothes = async (filter: string) => {
 }
 export const SaveMyChoise = async (choise: string[]) => {
     try {
-        const res = await axios.put(`${API_URL}/api/current-selection`,
+        await axios.put(`${API_URL}/api/current-selection`,
             { clothingItemIds: choise },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
 

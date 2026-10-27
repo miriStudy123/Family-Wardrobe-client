@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { GetNotAvailable, UpDate } from "../services/updateStatus"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import type { Look } from "./clothes";
 
 const UpdateStatus = () => {
     const [updated, setUpdated] = useState<string[]>([]);
@@ -23,7 +24,7 @@ const UpdateStatus = () => {
 
             {
 
-                data?.map((item, ind) => {
+                data?.map((item: Look) => {
                     return (<>
                         <p className="tile-top">{item.name}</p>
                         <img className="tile-img" src={item.imageUrl} />

@@ -79,7 +79,7 @@ const Clothes = () => {
         </select>
 
         <div className="closet-cards">
-            {data?.map((item, ind) => {
+            {data?.map((item: Look & { season: string, isAvailable: boolean }, ind: number) => {
                 return (<>
                     <p className="tile-top" key={ind}>{item.name}</p>
                     <img className="tile-img" src={item.imageUrl} alt={item.name} />

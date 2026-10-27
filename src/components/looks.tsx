@@ -13,7 +13,7 @@ const Looks =  ({setChoose}:LooksProps) => {
     {isPending&&<p className="muted col-span-full">just a minute:)❤️❤️❤️</p>}
     {isError&&<p className="error-text col-span-full">error by server</p>}
     {
-        data?.map((item, ind) => {
+        data?.map((item: { name: string, items: (Look & { isAvailable: boolean })[] }) => {
            
                 return(<>
                     <p className="look-name">{item.name}</p>

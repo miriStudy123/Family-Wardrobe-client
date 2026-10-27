@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState, type ReactNode } from "react";
 import { createContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { API_URL } from "../services/generalService";
 
 
 
@@ -33,7 +33,7 @@ export const UserProvider = ({ children }: userproviderProps) => {
 
     const UserIs = async () => {
         try {
-            const res = await axios.get("http://localhost:4000/api/auth/me"
+            const res = await axios.get(`${API_URL}/api/auth/me`
                 , {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -70,7 +70,7 @@ export const UserProvider = ({ children }: userproviderProps) => {
 
     const logout = async () => {
         try {
-            await axios.post('http://localhost:4000/api/auth/logout', null, {
+            await axios.post(`${API_URL}/api/auth/logout`, null, {
                 headers: { Authorization: `Bearer ${token}` },
             });
         }

@@ -1,19 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { GetAllMassege, MarkAsRead } from "../services/masseges"
-import { useState } from "react"
 
 const Masseges = () => {
-    const { data, isPending, isError ,refetch} = useQuery({
+    const { data, refetch} = useQuery({
         queryKey: ["GetAllMassege"],
         queryFn: () => GetAllMassege()
     })
-    const [reed,setread]=useState(false);
 const Mutasion=useMutation({
     mutationFn:MarkAsRead
 })
     return <>
         {
-            data?.map((item, ind) => {
+            data?.map((item: { id: string, childName: string, body: string, createdAt: string, readAt: string | null }) => {
                 return (<><p className="msg-from">{item.childName}</p>
                     <p className="msg-body">{item.body}</p>
                     <p className="msg-date">{item.createdAt}</p>

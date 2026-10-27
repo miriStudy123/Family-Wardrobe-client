@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { GetClothes } from "../services/clothesFunction"
 import { DeleteClothesFunc } from "../services/delete"
 import { useState } from "react"
+import type { Look } from "../pages/clothes"
 
 export type ClothingItem = {
     id: string,
@@ -13,7 +14,7 @@ export type ClothingItem = {
 }
 const DeleteClothes = () => {
     const [succes, setSuccues] = useState(false);
-    const { data, isPending, isError,refetch } = useQuery({
+    const { data, isPending,refetch } = useQuery({
         queryKey: ["getAllTheClothes"],
         queryFn: () => GetClothes("")
     })
@@ -24,7 +25,7 @@ const DeleteClothes = () => {
         {isPending && <p className="status-line" >מעלים את הנתונים רק רגע...</p>}
         {MutasionDelete.isPending && <p className="status-line">תהליך המחיקה תכיף מסתיים...</p>}
         {
-            data?.map((item , ind) => {
+            data?.map((item: Look) => {
                 return (
                     <div className="del-card">
                         <p>{item.name}</p>
