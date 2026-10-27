@@ -1,0 +1,515 @@
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=Rubik:wght@500;600;700;800&display=swap");
+@import "tailwindcss";
+
+/* ---------- theme: warm off-white, deep green, text font + heading font ---------- */
+@theme {
+  --font-sans: "Heebo", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Rubik", "Heebo", system-ui, sans-serif;
+
+  --color-canvas: #f4f2ed;
+  --color-field: #fbfaf7;
+  --color-brand-50: #eef6f2;
+  --color-brand-100: #d8ebe3;
+  --color-brand-200: #b4d8ca;
+  --color-brand-300: #86bfa9;
+  --color-brand-400: #4f9e83;
+  --color-brand-500: #2b8166;
+  --color-brand-600: #1f6b57;
+  --color-brand-700: #195a49;
+  --color-brand-800: #14483b;
+
+  --animate-toast-in: toast-in 0.25s ease-out;
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ---------- base ---------- */
+@layer base {
+  html {
+    direction: rtl;
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-stone-700 antialiased;
+  }
+
+  #root {
+    @apply flex min-h-screen flex-col;
+  }
+}
+
+/* ---------- components ---------- */
+@layer components {
+  /* ===== header (Header.tsx) ===== */
+  /* solid deep-green bar with light text */
+  .app-header {
+    @apply sticky top-0 z-10 order-first flex w-full flex-wrap items-center gap-x-4 gap-y-2 bg-brand-600 px-4 py-3 text-white shadow-md shadow-brand-800/10 sm:px-8;
+  }
+
+  /* ----- experiment: on the closet page only (clothes.tsx), and only on wide screens,
+     the header becomes a sidebar standing on the right. Other pages keep the top bar. ----- */
+  #root:has(> .closet) {
+    @apply xl:flex-row xl:items-start;
+  }
+
+  #root:has(> .closet) > .app-header {
+    @apply xl:h-screen xl:w-64 xl:shrink-0 xl:flex-col xl:flex-nowrap xl:items-stretch xl:gap-3 xl:px-5 xl:py-7 xl:shadow-xl;
+  }
+
+  #root:has(> .closet) > .app-header .nav {
+    @apply xl:flex-1 xl:basis-auto xl:flex-col xl:flex-nowrap xl:gap-1;
+  }
+
+  #root:has(> .closet) > .app-header .nav > svg {
+    @apply xl:mb-6 xl:size-12;
+  }
+
+  #root:has(> .closet) > .app-header .nav-link {
+    @apply xl:rounded-xl xl:px-4 xl:py-2.5 xl:text-[15px];
+  }
+
+  #root:has(> .closet) > .app-header .user-badge {
+    @apply xl:border-t xl:border-white/15 xl:bg-transparent xl:px-1 xl:pt-4 xl:pb-1 xl:text-center xl:text-sm xl:rounded-none;
+  }
+
+  #root:has(> .closet) > .app-header .btn-ghost {
+    @apply xl:w-full xl:py-2.5;
+  }
+
+  #root:has(> .closet) > .closet {
+    @apply xl:mx-0 xl:w-auto xl:min-w-0 xl:flex-1 xl:px-8;
+  }
+
+  /* the logout button sits on the green bar, so it gets a light outline there */
+  .app-header .btn-ghost {
+    @apply border-white/50 bg-transparent text-white hover:border-white hover:bg-white/10 hover:text-white focus-visible:ring-white/30;
+  }
+
+  /* full row on phones so the links wrap side by side; shares the row on wider screens */
+  .nav {
+    @apply flex basis-full flex-wrap gap-1 sm:flex-1 sm:basis-0;
+  }
+
+  .nav-link {
+    @apply rounded-lg px-3 py-1.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-4 focus-visible:ring-white/30 focus-visible:outline-none;
+  }
+
+  .user-badge {
+    @apply rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white;
+  }
+
+  /* ===== buttons ===== */
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-danger {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold transition duration-150 focus-visible:ring-4 focus-visible:ring-brand-200 focus-visible:outline-none active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100;
+  }
+
+  .btn-primary {
+    @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700 hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply border-[1.5px] border-brand-600 bg-white text-brand-700 hover:bg-brand-50;
+  }
+
+  .btn-ghost {
+    @apply border border-stone-300 bg-white text-stone-700 hover:border-stone-400 hover:text-stone-900;
+  }
+
+  .btn-danger {
+    @apply border border-rose-200 bg-white text-rose-600 hover:bg-rose-50 focus-visible:ring-rose-100;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  /* category / child picker — the focused one looks selected */
+  .chip {
+    @apply cursor-pointer rounded-full border-[1.5px] border-stone-300 bg-white px-5 py-2 text-[15px] font-semibold text-stone-800 transition hover:border-brand-400 hover:text-brand-700 focus:border-brand-600 focus:bg-brand-50 focus:text-brand-700 focus:outline-none;
+  }
+
+  /* login: parent / child switch */
+  .login-switch {
+    @apply grid grid-cols-2 gap-2;
+  }
+
+  .tab {
+    @apply cursor-pointer rounded-xl bg-stone-100 px-3 py-2.5 text-sm font-semibold text-stone-500 transition hover:text-stone-700 focus-visible:ring-4 focus-visible:ring-brand-100 focus-visible:outline-none;
+  }
+
+  /* the active tab is the one whose fields the form is showing */
+  .login-switch:has(input[placeholder="idMeneger"]) > .tab:nth-of-type(1),
+  .login-switch:has(input[placeholder="childName"]) > .tab:nth-of-type(2) {
+    @apply bg-white text-brand-700 shadow-sm ring-1 ring-brand-200;
+  }
+
+  /* ===== forms ===== */
+  .form {
+    @apply flex flex-col gap-3;
+  }
+
+  .label {
+    @apply mt-1 text-sm font-semibold text-stone-700;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-stone-300/80 bg-field px-4 py-3 text-[15px] text-stone-800 transition placeholder:text-stone-400 focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-100 focus:outline-none disabled:cursor-not-allowed disabled:bg-stone-100;
+  }
+
+  .file-input {
+    @apply cursor-pointer border-dashed bg-brand-50/40 file:me-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-white file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-brand-700 file:shadow-sm;
+  }
+
+  .check {
+    @apply inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-stone-700 select-none;
+  }
+
+  .checkbox {
+    @apply size-4 cursor-pointer accent-brand-600;
+  }
+
+  /* ===== surfaces ===== */
+  .card {
+    @apply rounded-2xl border border-stone-200 bg-white p-6 shadow-sm;
+  }
+
+  .auth-card {
+    @apply relative mx-auto my-12 w-[calc(100%-2rem)] max-w-md rounded-3xl border border-stone-200 bg-white p-8 shadow-lg shadow-stone-300/40;
+  }
+
+  /* a button that looks like a soft text link (e.g. "אין לך עדיין משפחה?" under the login button) */
+  .text-link {
+    @apply mt-1 cursor-pointer self-center rounded-lg px-2 py-1 text-center text-sm font-semibold text-brand-700 underline-offset-4 transition hover:text-brand-800 hover:underline focus-visible:ring-4 focus-visible:ring-brand-100 focus-visible:outline-none;
+  }
+
+  /* a page heading that sits above a form card (createdFamily.tsx), with a short green line under it */
+  .form-heading {
+    @apply mx-auto mt-12 w-[calc(100%-2rem)] max-w-md bg-[linear-gradient(var(--color-brand-500),var(--color-brand-500))] bg-[length:3.5rem_5px] bg-bottom bg-no-repeat pb-5 text-center font-display text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl;
+  }
+
+  /* login: "קצת עלינו..." — a small soft label in the top corner of the card */
+  .about-link {
+    @apply absolute end-5 top-5 cursor-pointer rounded-full bg-brand-50 px-3.5 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-brand-100 focus-visible:ring-4 focus-visible:ring-brand-100 focus-visible:outline-none;
+  }
+
+  /* ===== Aboutus.tsx ===== */
+  /* the text sits in one centered card: icon, title, then a comfortable reading column */
+  .about-card {
+    @apply mx-auto mb-16 flex w-[calc(100%-2rem)] max-w-2xl flex-col rounded-3xl border border-stone-200 bg-white px-6 py-10 text-lg leading-[2.1] text-pretty text-stone-700 shadow-lg shadow-stone-300/40 sm:px-12 sm:py-12 sm:text-xl sm:leading-[2.2];
+  }
+
+  .about-card::before {
+    content: "קצת עלינו";
+    /* short green line under the title, drawn as a background (a pseudo-element can't have its own ::after) */
+    @apply mb-6 bg-[linear-gradient(var(--color-brand-500),var(--color-brand-500))] bg-[length:3.5rem_5px] bg-bottom bg-no-repeat pb-5 text-center font-display text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl;
+  }
+
+  .about-icon {
+    @apply order-first mx-auto mb-4 size-14 text-brand-500;
+  }
+
+  /* login: a thin line with a small title in the middle, between the welcome text and the form */
+  .auth-divider {
+    @apply mt-7 mb-5 flex items-center gap-3 text-xs font-semibold tracking-[0.2em] text-stone-400 uppercase before:h-px before:flex-1 before:bg-stone-200 before:content-[''] after:h-px after:flex-1 after:bg-stone-200 after:content-[''];
+  }
+
+  .page {
+    @apply mx-auto w-[calc(100%-2rem)] max-w-6xl py-8;
+  }
+
+  .thumb {
+    @apply size-12 rounded-xl border border-stone-200 bg-brand-50 object-cover text-[10px] text-stone-400;
+  }
+
+  .code-box {
+    @apply mt-1 rounded-xl border-2 border-dashed border-brand-300 bg-white p-3 text-center font-mono text-2xl font-bold tracking-[0.2em] text-brand-700 [direction:ltr];
+  }
+
+  /* ===== text ===== */
+  .page-title {
+    @apply font-display text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl;
+  }
+
+  /* ===== home.tsx ===== */
+  /* the greeting: big heading font with a short green line under it; starts on the same edge as the text */
+  .home-hello {
+    @apply pt-6 font-display text-4xl leading-tight font-bold tracking-tight text-stone-900 after:mt-5 after:block after:h-1.5 after:w-16 after:rounded-full after:bg-brand-500 after:content-[''] sm:pt-10 sm:text-5xl lg:text-6xl;
+  }
+
+  /* the welcome text: larger, airy line height, comfortable line length */
+  .home-intro {
+    @apply mt-8 max-w-3xl text-xl leading-[2] text-pretty text-stone-600 sm:text-2xl sm:leading-[2.1];
+  }
+
+  .section-title {
+    @apply font-display text-lg font-bold text-stone-900;
+  }
+
+  .muted {
+    @apply text-sm text-stone-500;
+  }
+
+  .error-text {
+    @apply text-sm text-rose-600;
+  }
+
+  .pill {
+    @apply justify-self-start rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700;
+  }
+
+  .status-line {
+    @apply w-full py-3 text-center text-sm text-stone-500;
+  }
+
+  /* ===== messages to the user ===== */
+  .alert-success {
+    @apply rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700;
+  }
+
+  .alert-error {
+    @apply flex flex-col gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700;
+  }
+
+  .toast {
+    @apply fixed start-6 bottom-6 z-20 max-w-[calc(100%-3rem)] animate-toast-in rounded-xl bg-stone-800 px-5 py-3.5 text-sm font-semibold text-white shadow-xl motion-reduce:animate-none;
+  }
+
+  /* ===== item tiles: one item = name, image, [details], button, stacked as one card ===== */
+  .tile-top {
+    @apply mt-4 min-w-0 truncate rounded-t-2xl border border-b-0 border-stone-200/70 bg-white px-4 pt-4 pb-2 font-bold text-stone-800;
+  }
+
+  .tile-img {
+    @apply block h-44 w-full min-w-0 border-x border-stone-200/70 bg-brand-50 object-cover text-xs text-stone-400;
+  }
+
+  .tile-meta {
+    @apply min-w-0 border-x border-stone-200/70 bg-white px-4 pt-2 text-sm text-stone-500;
+  }
+
+  .tile-action {
+    @apply w-full min-w-0 cursor-pointer rounded-b-2xl border border-stone-200/70 bg-white px-4 py-3 text-sm font-bold text-brand-700 transition hover:bg-brand-50 focus-visible:bg-brand-50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  /* ===== clothes.tsx — "הארון שלי" =====
+     Desktop: chips and filters on top, the cards on the right,
+     a side column with "הבחירה שלי להיום", "הודעה להורים", the sent message and the saved looks.
+     Row 8 is the only flexible row, so a long card list never opens a gap in the side column. */
+  .closet {
+    @apply mx-auto flex w-[calc(100%-2rem)] max-w-7xl flex-wrap items-center gap-2 py-8 lg:grid lg:grid-cols-[repeat(6,max-content)_minmax(0,1fr)_320px] lg:grid-rows-[auto_auto_auto_auto_auto_auto_auto_1fr] lg:gap-x-2 lg:gap-y-3;
+  }
+
+  .closet::before {
+    content: "הארון שלי";
+    @apply font-display mb-2 basis-full text-3xl font-extrabold tracking-tight text-stone-800 lg:col-span-7 lg:row-start-1 lg:mb-0;
+  }
+
+  .closet > .chip {
+    @apply lg:row-start-2;
+  }
+
+  .closet > select {
+    @apply lg:col-span-2 lg:row-start-3 lg:justify-self-start;
+  }
+
+  .closet > .check {
+    @apply ms-2 lg:col-span-5 lg:col-start-3 lg:row-start-3 lg:ms-0 lg:justify-self-start;
+  }
+
+  .closet-cards {
+    @apply grid basis-full grid-flow-row-dense gap-x-4 self-start sm:grid-cols-2 lg:col-start-1 lg:col-end-8 lg:row-start-4 lg:row-end-9 xl:grid-cols-3;
+  }
+
+  .closet-cards:empty {
+    @apply hidden;
+  }
+
+  /* 2 cards per row: items are 5 pieces each, so pieces 1-5 go right, 6-10 go left */
+  .closet-cards > :is(:nth-child(10n + 1), :nth-child(10n + 2), :nth-child(10n + 3), :nth-child(10n + 4), :nth-child(10n + 5)) {
+    @apply sm:col-start-1;
+  }
+  .closet-cards > :is(:nth-child(10n + 6), :nth-child(10n + 7), :nth-child(10n + 8), :nth-child(10n + 9), :nth-child(10n + 10)) {
+    @apply sm:col-start-2;
+  }
+
+  /* 3 cards per row */
+  .closet-cards > :is(:nth-child(15n + 1), :nth-child(15n + 2), :nth-child(15n + 3), :nth-child(15n + 4), :nth-child(15n + 5)) {
+    @apply xl:col-start-1;
+  }
+  .closet-cards > :is(:nth-child(15n + 6), :nth-child(15n + 7), :nth-child(15n + 8), :nth-child(15n + 9), :nth-child(15n + 10)) {
+    @apply xl:col-start-2;
+  }
+  .closet-cards > :is(:nth-child(15n + 11), :nth-child(15n + 12), :nth-child(15n + 13), :nth-child(15n + 14), :nth-child(15n + 15)) {
+    @apply xl:col-start-3;
+  }
+
+  /* "הבחירה שלי להיום" */
+  .closet-panel {
+    @apply mt-4 grid basis-full grid-cols-[minmax(0,1fr)_48px] items-center gap-x-3 gap-y-2.5 self-start rounded-2xl border border-stone-200/70 bg-white p-5 shadow-sm lg:col-start-8 lg:row-start-4 lg:ms-4 lg:-mt-28; /* pulled up next to the category chips (that corner of the grid is empty) */
+  }
+
+  .closet-panel::before {
+    content: "הבחירה שלי להיום";
+    @apply font-display col-span-full mb-1 text-lg font-bold text-stone-800;
+  }
+
+  .chosen {
+    @apply flex min-w-0 items-center gap-2.5 truncate text-[15px] text-stone-700 before:size-2 before:shrink-0 before:rounded-full before:bg-brand-400 before:content-[''];
+  }
+
+  /* "הודעה להורים" */
+  .closet-msg {
+    @apply mt-4 flex basis-full flex-col gap-3 self-start rounded-2xl border border-stone-200/70 bg-white p-5 shadow-sm lg:col-start-8 lg:row-start-5 lg:ms-4;
+  }
+
+  .closet-sent {
+    @apply mt-2 basis-full self-start lg:col-start-8 lg:row-start-6 lg:ms-4;
+  }
+
+  /* saved looks — under the cards (last on small screens) */
+  .closet-looks {
+    @apply order-last mt-4 grid basis-full grid-cols-[minmax(0,1fr)_48px_auto] items-center gap-x-3 gap-y-2.5 self-start rounded-2xl border border-stone-200/70 bg-white p-5 shadow-sm lg:order-none lg:col-start-8 lg:row-start-7 lg:ms-4;
+  }
+
+  /* a title so it is clear what this card is */
+  .closet-looks::before {
+    content: "הלוקים הקבועים שלי";
+    @apply col-span-full font-display text-lg font-bold text-stone-900;
+  }
+
+  /* "לצפייה בלוקים הקבועים" — full width so it is easy to notice (overrides the small-button classes on it) */
+  .closet-looks > button:first-child {
+    @apply justify-self-stretch! px-5! py-3! text-[15px]!;
+  }
+
+  .look-name {
+    @apply font-display col-span-full mt-2 border-t border-stone-100 pt-4 text-lg font-bold text-stone-800;
+  }
+
+  /* ===== createClothes.tsx — children list ===== */
+  .pick-list {
+    @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-2xl bg-brand-50/60 p-4;
+  }
+
+  .pick-list:empty {
+    @apply hidden;
+  }
+
+  /* ===== updateStatus.tsx — cards of clothes waiting to come back =====
+     Pieces are flat: status lines, then name, image, button per item.
+     The column is picked by the image's position, so the status lines do not shift the cards. */
+  .returns-grid {
+    @apply mx-auto grid w-[calc(100%-2rem)] max-w-6xl grid-flow-row-dense gap-x-4 pt-8 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .returns-grid::before {
+    content: "בגדים שמחכים לחזור לארון";
+    /* centered, lighter weight, with a short green line under it (drawn as a background, no extra element) */
+    @apply font-display col-span-full mb-2 bg-[linear-gradient(var(--color-brand-500),var(--color-brand-500))] bg-[length:4rem_5px] bg-bottom bg-no-repeat pb-5 text-center text-3xl font-semibold tracking-tight text-brand-800 sm:text-4xl;
+  }
+
+  .returns-grid:empty::after {
+    content: "כל הבגדים בארון 👍";
+    @apply col-span-full mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center font-semibold text-emerald-700;
+  }
+
+  .returns-grid > .tile-top:has(+ img:nth-of-type(odd)),
+  .returns-grid > img:nth-of-type(odd),
+  .returns-grid > button:nth-of-type(odd) {
+    @apply sm:col-start-1;
+  }
+  .returns-grid > .tile-top:has(+ img:nth-of-type(even)),
+  .returns-grid > img:nth-of-type(even),
+  .returns-grid > button:nth-of-type(even) {
+    @apply sm:col-start-2;
+  }
+  .returns-grid > .tile-top:has(+ img:nth-of-type(3n + 1)),
+  .returns-grid > img:nth-of-type(3n + 1),
+  .returns-grid > button:nth-of-type(3n + 1) {
+    @apply lg:col-start-1;
+  }
+  .returns-grid > .tile-top:has(+ img:nth-of-type(3n + 2)),
+  .returns-grid > img:nth-of-type(3n + 2),
+  .returns-grid > button:nth-of-type(3n + 2) {
+    @apply lg:col-start-2;
+  }
+  .returns-grid > .tile-top:has(+ img:nth-of-type(3n)),
+  .returns-grid > img:nth-of-type(3n),
+  .returns-grid > button:nth-of-type(3n) {
+    @apply lg:col-start-3;
+  }
+
+  /* ===== deleteClothes.tsx — the page is a fragment, so its cards sit right in #root ===== */
+  #root:has(> .del-card) {
+    @apply flex-row flex-wrap content-start justify-center gap-x-4 pb-14;
+  }
+
+  .del-card {
+    @apply mt-6 flex w-[calc(100%-2rem)] flex-col overflow-hidden rounded-2xl border border-stone-200/70 bg-white shadow-sm transition hover:shadow-md sm:w-72;
+  }
+
+  .del-card > p {
+    @apply truncate px-4 pt-4 pb-2 font-bold text-stone-800;
+  }
+
+  .del-card > img {
+    @apply h-44 w-full bg-brand-50 object-cover;
+  }
+
+  .del-action {
+    @apply cursor-pointer border-t border-stone-100 px-4 py-3 text-sm font-bold text-stone-700 transition hover:bg-rose-50 hover:text-rose-600 focus-visible:bg-rose-50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  /* ===== messages — also fragments in #root, drawn as a centered column of cards ===== */
+  #root:has(> .msg-from)::before,
+  #root:has(> .msg-mine)::before {
+    @apply font-display mx-auto mt-8 w-[calc(100%-2rem)] max-w-2xl text-2xl font-extrabold tracking-tight text-stone-800 sm:text-3xl;
+  }
+  #root:has(> .msg-from)::before {
+    content: "הודעות מהילדים";
+  }
+  #root:has(> .msg-mine)::before {
+    content: "ההודעות ששלחתי";
+  }
+
+  .msg-from,
+  .msg-body,
+  .msg-date,
+  .msg-action,
+  .msg-mine,
+  .msg-foot {
+    @apply mx-auto w-[calc(100%-2rem)] max-w-2xl border-stone-200/70 bg-white;
+  }
+
+  /* parent page: child name, body, date, button */
+  .msg-from {
+    @apply mt-4 rounded-t-2xl border border-b-0 px-5 pt-5 text-sm font-bold text-brand-700;
+  }
+
+  .msg-body {
+    @apply border-x px-5 py-2 text-[17px] leading-relaxed break-words whitespace-pre-wrap text-stone-800;
+  }
+
+  .msg-date {
+    @apply border-x px-5 pb-4 text-xs text-stone-400;
+  }
+
+  .msg-action {
+    @apply cursor-pointer rounded-b-2xl border px-5 py-3 text-start text-sm font-bold text-brand-700 transition hover:bg-brand-50 focus-visible:bg-brand-50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  /* child page: body, then read / not read */
+  .msg-mine {
+    @apply mt-4 rounded-t-2xl border border-b-0 px-5 pt-5 pb-3 text-[17px] leading-relaxed break-words whitespace-pre-wrap text-stone-800;
+  }
+
+  .msg-foot {
+    @apply rounded-b-2xl border border-t-stone-100 px-5 py-3 text-sm font-semibold text-brand-700;
+  }
+}
